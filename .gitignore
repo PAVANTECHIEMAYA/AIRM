@@ -1,0 +1,21 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+/generated/prisma
+node_modules/
+.next/
+.env
+# dependencies
+node_modules/
+
+# nextjs build
+.next/
+
+# env files
+.env
+.env.local
+.env.* 
+
+# misc
+tsconfig.tsbuildinfo

@@ -1,0 +1,622 @@
+[
+  {
+    "id": "agile-software-development",
+    "title": "Agile Software Development",
+    "subtitle": "Planning • Development • Testing",
+    "phases": [
+      {
+        "name": "Planning",
+        "tasks": [
+          "Define user stories",
+          "Estimate tasks",
+          "Sprint planning",
+          "Set priorities",
+          "Team assignment"
+        ]
+      },
+      {
+        "name": "Development",
+        "tasks": [
+          "Implement features",
+          "Write tests",
+          "Code review",
+          "Merge branches",
+          "Update documentation"
+        ]
+      },
+      {
+        "name": "Testing",
+        "tasks": [
+          "Functional testing",
+          "Bug reporting",
+          "Regression tests",
+          "Performance checks",
+          "Approve for release"
+        ]
+      }
+    ],
+    "taskCount": 15,
+    "sprintLength": "2 weeks",
+    "description": "Standard agile workflow for software development projects"
+  },
+  {
+    "id": "product-launch-plan",
+    "title": "Product Launch Plan",
+    "subtitle": "Research • Preparation • Launch",
+    "phases": [
+      {
+        "name": "Research",
+        "tasks": [
+          "Market study",
+          "Competitor scan",
+          "Customer interviews",
+          "SWOT analysis",
+          "Define buyer persona"
+        ]
+      },
+      {
+        "name": "Preparation",
+        "tasks": [
+          "Create messaging",
+          "Design assets",
+          "Build landing page",
+          "Prepare sales kit",
+          "Finalize pricing"
+        ]
+      },
+      {
+        "name": "Launch",
+        "tasks": [
+          "Publish campaign",
+          "Send announcement emails",
+          "Release product",
+          "Monitor engagement",
+          "Track KPIs"
+        ]
+      }
+    ],
+    "taskCount": 15,
+    "sprintLength": "2 weeks",
+    "description": "Complete plan for launching a new product"
+  },
+  {
+    "id": "website-project-plan",
+    "title": "Website Project Plan",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Website Project Plan Task A",
+          "Website Project Plan Task B",
+          "Website Project Plan Task C",
+          "Website Project Plan Task D",
+          "Website Project Plan Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Website Project Plan Task F",
+          "Website Project Plan Task G",
+          "Website Project Plan Task H",
+          "Website Project Plan Task I",
+          "Website Project Plan Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for website development projects"
+  },
+  {
+    "id": "creative-project",
+    "title": "Creative Project",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Creative Project Task A",
+          "Creative Project Task B",
+          "Creative Project Task C",
+          "Creative Project Task D",
+          "Creative Project Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Creative Project Task F",
+          "Creative Project Task G",
+          "Creative Project Task H",
+          "Creative Project Task I",
+          "Creative Project Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for creative projects"
+  },
+  {
+    "id": "bug-tracking",
+    "title": "Bug Tracking",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Bug Tracking Task A",
+          "Bug Tracking Task B",
+          "Bug Tracking Task C",
+          "Bug Tracking Task D",
+          "Bug Tracking Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Bug Tracking Task F",
+          "Bug Tracking Task G",
+          "Bug Tracking Task H",
+          "Bug Tracking Task I",
+          "Bug Tracking Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for bug tracking and resolution"
+  },
+  {
+    "id": "retainer-project",
+    "title": "Retainer Project",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Retainer Project Task A",
+          "Retainer Project Task B",
+          "Retainer Project Task C",
+          "Retainer Project Task D",
+          "Retainer Project Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Retainer Project Task F",
+          "Retainer Project Task G",
+          "Retainer Project Task H",
+          "Retainer Project Task I",
+          "Retainer Project Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for retainer-based projects"
+  },
+  {
+    "id": "marketing-campaign",
+    "title": "Marketing Campaign",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Marketing Campaign Task A",
+          "Marketing Campaign Task B",
+          "Marketing Campaign Task C",
+          "Marketing Campaign Task D",
+          "Marketing Campaign Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Marketing Campaign Task F",
+          "Marketing Campaign Task G",
+          "Marketing Campaign Task H",
+          "Marketing Campaign Task I",
+          "Marketing Campaign Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for marketing campaigns"
+  },
+  {
+    "id": "client-onboarding",
+    "title": "Client Onboarding",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Client Onboarding Task A",
+          "Client Onboarding Task B",
+          "Client Onboarding Task C",
+          "Client Onboarding Task D",
+          "Client Onboarding Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Client Onboarding Task F",
+          "Client Onboarding Task G",
+          "Client Onboarding Task H",
+          "Client Onboarding Task I",
+          "Client Onboarding Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for client onboarding processes"
+  },
+  {
+    "id": "sprint-planning",
+    "title": "Sprint Planning",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Sprint Planning Task A",
+          "Sprint Planning Task B",
+          "Sprint Planning Task C",
+          "Sprint Planning Task D",
+          "Sprint Planning Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Sprint Planning Task F",
+          "Sprint Planning Task G",
+          "Sprint Planning Task H",
+          "Sprint Planning Task I",
+          "Sprint Planning Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for sprint planning activities"
+  },
+  {
+    "id": "content-production",
+    "title": "Content Production",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Content Production Task A",
+          "Content Production Task B",
+          "Content Production Task C",
+          "Content Production Task D",
+          "Content Production Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Content Production Task F",
+          "Content Production Task G",
+          "Content Production Task H",
+          "Content Production Task I",
+          "Content Production Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for content production workflows"
+  },
+  {
+    "id": "event-planning",
+    "title": "Event Planning",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Event Planning Task A",
+          "Event Planning Task B",
+          "Event Planning Task C",
+          "Event Planning Task D",
+          "Event Planning Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Event Planning Task F",
+          "Event Planning Task G",
+          "Event Planning Task H",
+          "Event Planning Task I",
+          "Event Planning Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for event planning and management"
+  },
+  {
+    "id": "social-media-campaign",
+    "title": "Social Media Campaign",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Social Media Campaign Task A",
+          "Social Media Campaign Task B",
+          "Social Media Campaign Task C",
+          "Social Media Campaign Task D",
+          "Social Media Campaign Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Social Media Campaign Task F",
+          "Social Media Campaign Task G",
+          "Social Media Campaign Task H",
+          "Social Media Campaign Task I",
+          "Social Media Campaign Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for social media campaign management"
+  },
+  {
+    "id": "hr-employee-onboarding",
+    "title": "HR Employee Onboarding",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "HR Employee Onboarding Task A",
+          "HR Employee Onboarding Task B",
+          "HR Employee Onboarding Task C",
+          "HR Employee Onboarding Task D",
+          "HR Employee Onboarding Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "HR Employee Onboarding Task F",
+          "HR Employee Onboarding Task G",
+          "HR Employee Onboarding Task H",
+          "HR Employee Onboarding Task I",
+          "HR Employee Onboarding Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for HR employee onboarding processes"
+  },
+  {
+    "id": "sales-pipeline-management",
+    "title": "Sales Pipeline Management",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Sales Pipeline Management Task A",
+          "Sales Pipeline Management Task B",
+          "Sales Pipeline Management Task C",
+          "Sales Pipeline Management Task D",
+          "Sales Pipeline Management Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Sales Pipeline Management Task F",
+          "Sales Pipeline Management Task G",
+          "Sales Pipeline Management Task H",
+          "Sales Pipeline Management Task I",
+          "Sales Pipeline Management Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for sales pipeline management"
+  },
+  {
+    "id": "customer-success-playbook",
+    "title": "Customer Success Playbook",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Customer Success Playbook Task A",
+          "Customer Success Playbook Task B",
+          "Customer Success Playbook Task C",
+          "Customer Success Playbook Task D",
+          "Customer Success Playbook Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Customer Success Playbook Task F",
+          "Customer Success Playbook Task G",
+          "Customer Success Playbook Task H",
+          "Customer Success Playbook Task I",
+          "Customer Success Playbook Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for customer success management"
+  },
+  {
+    "id": "devops-release-workflow",
+    "title": "DevOps Release Workflow",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "DevOps Release Workflow Task A",
+          "DevOps Release Workflow Task B",
+          "DevOps Release Workflow Task C",
+          "DevOps Release Workflow Task D",
+          "DevOps Release Workflow Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "DevOps Release Workflow Task F",
+          "DevOps Release Workflow Task G",
+          "DevOps Release Workflow Task H",
+          "DevOps Release Workflow Task I",
+          "DevOps Release Workflow Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for DevOps release workflows"
+  },
+  {
+    "id": "qa-testing-cycle",
+    "title": "QA Testing Cycle",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "QA Testing Cycle Task A",
+          "QA Testing Cycle Task B",
+          "QA Testing Cycle Task C",
+          "QA Testing Cycle Task D",
+          "QA Testing Cycle Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "QA Testing Cycle Task F",
+          "QA Testing Cycle Task G",
+          "QA Testing Cycle Task H",
+          "QA Testing Cycle Task I",
+          "QA Testing Cycle Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for QA testing cycles"
+  },
+  {
+    "id": "mobile-app-development",
+    "title": "Mobile App Development",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Mobile App Development Task A",
+          "Mobile App Development Task B",
+          "Mobile App Development Task C",
+          "Mobile App Development Task D",
+          "Mobile App Development Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Mobile App Development Task F",
+          "Mobile App Development Task G",
+          "Mobile App Development Task H",
+          "Mobile App Development Task I",
+          "Mobile App Development Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for mobile app development projects"
+  },
+  {
+    "id": "maintenance-support-operations",
+    "title": "Maintenance & Support Operations",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Maintenance & Support Operations Task A",
+          "Maintenance & Support Operations Task B",
+          "Maintenance & Support Operations Task C",
+          "Maintenance & Support Operations Task D",
+          "Maintenance & Support Operations Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Maintenance & Support Operations Task F",
+          "Maintenance & Support Operations Task G",
+          "Maintenance & Support Operations Task H",
+          "Maintenance & Support Operations Task I",
+          "Maintenance & Support Operations Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for maintenance and support operations"
+  },
+  {
+    "id": "learning-course-development",
+    "title": "Learning Course Development",
+    "subtitle": "Phase 1 • Phase 2 • Completed",
+    "phases": [
+      {
+        "name": "Phase 1",
+        "tasks": [
+          "Learning Course Development Task A",
+          "Learning Course Development Task B",
+          "Learning Course Development Task C",
+          "Learning Course Development Task D",
+          "Learning Course Development Task E"
+        ]
+      },
+      {
+        "name": "Phase 2",
+        "tasks": [
+          "Learning Course Development Task F",
+          "Learning Course Development Task G",
+          "Learning Course Development Task H",
+          "Learning Course Development Task I",
+          "Learning Course Development Task J"
+        ]
+      }
+    ],
+    "taskCount": 10,
+    "sprintLength": "2 weeks",
+    "description": "Template for learning course development"
+  }
+]
