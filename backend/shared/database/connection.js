@@ -30,19 +30,26 @@ for (const p of envPaths) {
 
 const { Pool } = pg;
 
-const pool = new Pool({
-  host: process.env.POSTGRES_HOST || process.env.DB_HOST || '143.110.249.144',
-  port: parseInt(process.env.POSTGRES_PORT || process.env.DB_PORT || '5432'),
-  database: process.env.POSTGRES_DB || process.env.DB_NAME || 'salesmaya_agent',
-  user: process.env.POSTGRES_USER || process.env.DB_USER || 'postgres',
-  password: process.env.POSTGRES_PASSWORD || process.env.DB_PASSWORD || 'techiemaya',
-  ssl: {
-    rejectUnauthorized: false
-  },
-  max: 20, // Maximum number of clients in the pool
-  idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
-  connectionTimeoutMillis: 30000, // Return an error after 30 seconds if connection cannot be established
-});
+// Enhanced connection pool with retry logic
+const createPool = () => {
+  return new Pool({
+    host: process.env.POSTGRES_HOST || process.env.DB_HOST || '143.110.249.144',
+    port: parseInt(process.env.POSTGRES_PORT || process.env.DB_PORT || '5432'),
+    database: process.env.POSTGRES_DB || process.env.DB_NAME || 'salesmaya_agent',
+    user: process.env.POSTGRES_USER || process.env.DB_USER || 'postgres',
+    password: process.env.POSTGRES_PASSWORD || process.env.DB_PASSWORD || 'techiemaya',
+    ssl: {
+      rejectUnauthorized: false
+    },
+    max: 20, // Maximum number of clients in the pool
+    idleTimeoutMillis: 30000, // Close idle clients after 30 seconds
+    connectionTimeoutMillis: 10000, // Reduced from 30s to 10s for faster failures
+    statement_timeout: 30000, // Statement timeout of 30s
+    allowExitOnIdle: false // Keep connection alive
+  });
+};
+
+const pool = createPool();
 
 // Set default search path to ERP schema
 pool.on('connect', async (client) => {

@@ -23,6 +23,12 @@ router.get('/', requireAdmin, usersController.getAllUsers);
 router.get('/with-roles', usersController.getAllUsersWithRoles);
 
 /**
+ * Create a new user (Admin only)
+ * POST /api/users
+ */
+router.post('/', requireAdmin, usersController.createUser);
+
+/**
  * Get single user
  * GET /api/users/:id
  */
@@ -33,6 +39,12 @@ router.get('/:id', usersController.getUserById);
  * PUT /api/users/:id/role
  */
 router.put('/:id/role', requireAdmin, usersController.updateUserRole);
+
+/**
+ * Delete user (Admin only)
+ * DELETE /api/users/:id
+ */
+router.delete('/:id', requireAdmin, usersController.deleteUser);
 
 export default router;
 

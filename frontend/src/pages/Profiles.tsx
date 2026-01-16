@@ -1942,6 +1942,185 @@ const Profiles = () => {
                 {/* Documents */}
                 {activeTab === 'documents' && (
                   <div className="space-y-4">
+                    {/* Document Upload Section */}
+                    {(currentUser?.role === 'admin' || currentUser?.role === 'hr' || currentUser?.id === selectedProfile.id) && (
+                      <div className="p-4 border rounded-lg bg-gray-50 mb-2">
+                        <h3 className="text-lg font-semibold mb-4">Upload Documents</h3>
+                        
+                        {/* KYC Documents */}
+                        <div className="mb-6">
+                          <h4 className="text-md font-semibold text-gray-700 mb-3 pb-2 border-b">KYC Documents</h4>
+                          <div className="space-y-3">
+                            {[
+                              { label: 'Aadhaar', type: 'aadhaar' },
+                              { label: 'Electricity / Utility Bill', type: 'utility_bill' },
+                              { label: 'PAN', type: 'pan' },
+                            ].map((doc) => (
+                              <form
+                                key={doc.type}
+                                className="grid grid-cols-1 md:grid-cols-[200px_1fr_auto] gap-3 items-center p-3 border rounded-lg hover:bg-white transition-colors"
+                                onSubmit={async (e) => {
+                                  e.preventDefault();
+                                  const file = uploadFiles[doc.type] || null;
+                                  if (!file) {
+                                    toast({ title: 'Error', description: `Please select a file for ${doc.label}.`, variant: 'destructive' });
+                                    return;
+                                  }
+                                  try {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    formData.append('type', doc.type);
+                                    formData.append('user_id', selectedProfile.id);
+                                    const token = localStorage.getItem('auth_token') || localStorage.getItem('token');
+                                    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/profiles/upload-document`, {
+                                      method: 'POST',
+                                      body: formData,
+                                      headers: { 'Authorization': `Bearer ${token || ''}` },
+                                    });
+                                    const result = await response.json();
+                                    if (!response.ok) throw new Error(result.message || 'Upload failed');
+                                    toast({ title: 'Success', description: result.message || `${doc.label} uploaded.` });
+                                    setUploadFiles((prev: any) => ({ ...prev, [doc.type]: null }));
+                                    refetchProfiles();
+                                  } catch (error: any) {
+                                    toast({ title: 'Error', description: error.message || `Failed to upload ${doc.label}`, variant: 'destructive' });
+                                  }
+                                }}
+                              >
+                                <Label htmlFor={`file-${doc.type}`} className="font-medium text-sm">{doc.label}</Label>
+                                <input
+                                  id={`file-${doc.type}`}
+                                  type="file"
+                                  title={`Upload ${doc.label}`}
+                                  className="border rounded px-3 py-2 text-sm w-full"
+                                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                  onChange={(e) => setUploadFiles((prev: any) => ({ ...prev, [doc.type]: e.target.files?.[0] || null }))}
+                                  required
+                                  aria-label={`Upload ${doc.label}`}
+                                />
+                                <Button type="submit" variant="outline" size="sm" title={`Upload ${doc.label}`}>Upload</Button>
+                              </form>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Education Certificates */}
+                        <div className="mb-6">
+                          <h4 className="text-md font-semibold text-gray-700 mb-3 pb-2 border-b">Education Certificates</h4>
+                          <div className="space-y-3">
+                            {[
+                              { label: 'SSC', type: 'ssc' },
+                              { label: 'HSC', type: 'hsc' },
+                              { label: 'Graduation', type: 'graduation' },
+                              { label: 'Post Graduation', type: 'post_graduation' },
+                            ].map((doc) => (
+                              <form
+                                key={doc.type}
+                                className="grid grid-cols-1 md:grid-cols-[200px_1fr_auto] gap-3 items-center p-3 border rounded-lg hover:bg-white transition-colors"
+                                onSubmit={async (e) => {
+                                  e.preventDefault();
+                                  const file = uploadFiles[doc.type] || null;
+                                  if (!file) {
+                                    toast({ title: 'Error', description: `Please select a file for ${doc.label}.`, variant: 'destructive' });
+                                    return;
+                                  }
+                                  try {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    formData.append('type', doc.type);
+                                    formData.append('user_id', selectedProfile.id);
+                                    const token = localStorage.getItem('auth_token') || localStorage.getItem('token');
+                                    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/profiles/upload-document`, {
+                                      method: 'POST',
+                                      body: formData,
+                                      headers: { 'Authorization': `Bearer ${token || ''}` },
+                                    });
+                                    const result = await response.json();
+                                    if (!response.ok) throw new Error(result.message || 'Upload failed');
+                                    toast({ title: 'Success', description: result.message || `${doc.label} uploaded.` });
+                                    setUploadFiles((prev: any) => ({ ...prev, [doc.type]: null }));
+                                    refetchProfiles();
+                                  } catch (error: any) {
+                                    toast({ title: 'Error', description: error.message || `Failed to upload ${doc.label}`, variant: 'destructive' });
+                                  }
+                                }}
+                              >
+                                <Label htmlFor={`file-${doc.type}`} className="font-medium text-sm">{doc.label}</Label>
+                                <input
+                                  id={`file-${doc.type}`}
+                                  type="file"
+                                  title={`Upload ${doc.label}`}
+                                  className="border rounded px-3 py-2 text-sm w-full"
+                                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                  onChange={(e) => setUploadFiles((prev: any) => ({ ...prev, [doc.type]: e.target.files?.[0] || null }))}
+                                  required
+                                  aria-label={`Upload ${doc.label}`}
+                                />
+                                <Button type="submit" variant="outline" size="sm" title={`Upload ${doc.label}`}>Upload</Button>
+                              </form>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Experience Documents */}
+                        <div>
+                          <h4 className="text-md font-semibold text-gray-700 mb-3 pb-2 border-b">Experience Documents</h4>
+                          <div className="space-y-3">
+                            {[
+                              { label: 'Experience Letter', type: 'experience_letter' },
+                              { label: 'Previous Company Salary Slips', type: 'salary_slip' },
+                              { label: 'Previous Company Offer / Appointment Letter', type: 'offer_letter' },
+                            ].map((doc) => (
+                              <form
+                                key={doc.type}
+                                className="grid grid-cols-1 md:grid-cols-[200px_1fr_auto] gap-3 items-center p-3 border rounded-lg hover:bg-white transition-colors"
+                                onSubmit={async (e) => {
+                                  e.preventDefault();
+                                  const file = uploadFiles[doc.type] || null;
+                                  if (!file) {
+                                    toast({ title: 'Error', description: `Please select a file for ${doc.label}.`, variant: 'destructive' });
+                                    return;
+                                  }
+                                  try {
+                                    const formData = new FormData();
+                                    formData.append('file', file);
+                                    formData.append('type', doc.type);
+                                    formData.append('user_id', selectedProfile.id);
+                                    const token = localStorage.getItem('auth_token') || localStorage.getItem('token');
+                                    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/profiles/upload-document`, {
+                                      method: 'POST',
+                                      body: formData,
+                                      headers: { 'Authorization': `Bearer ${token || ''}` },
+                                    });
+                                    const result = await response.json();
+                                    if (!response.ok) throw new Error(result.message || 'Upload failed');
+                                    toast({ title: 'Success', description: result.message || `${doc.label} uploaded.` });
+                                    setUploadFiles((prev: any) => ({ ...prev, [doc.type]: null }));
+                                    refetchProfiles();
+                                  } catch (error: any) {
+                                    toast({ title: 'Error', description: error.message || `Failed to upload ${doc.label}`, variant: 'destructive' });
+                                  }
+                                }}
+                              >
+                                <Label htmlFor={`file-${doc.type}`} className="font-medium text-sm">{doc.label}</Label>
+                                <input
+                                  id={`file-${doc.type}`}
+                                  type="file"
+                                  title={`Upload ${doc.label}`}
+                                  className="border rounded px-3 py-2 text-sm w-full"
+                                  accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                                  onChange={(e) => setUploadFiles((prev: any) => ({ ...prev, [doc.type]: e.target.files?.[0] || null }))}
+                                  required
+                                  aria-label={`Upload ${doc.label}`}
+                                />
+                                <Button type="submit" variant="outline" size="sm" title={`Upload ${doc.label}`}>Upload</Button>
+                              </form>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* Document List */}
                     {selectedProfile.documents && selectedProfile.documents.length > 0 ? (
                       <div className="space-y-2">
                         {selectedProfile.documents.map((doc: any, idx: number) => (

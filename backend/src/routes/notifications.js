@@ -19,9 +19,19 @@ router.get('/', async (req, res) => {
     const userId = req.userId;
     const { unread_only } = req.query;
 
-    console.log('=== GET NOTIFICATIONS ===');
-    console.log('Requesting user ID:', userId);
-    console.log('Unread only:', unread_only);
+    // Check if notifications table exists
+    const tableCheck = await pool.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_schema = 'erp' 
+        AND table_name = 'notifications'
+      )
+    `);
+
+    if (!tableCheck.rows[0].exists) {
+      // Table doesn't exist, return empty array
+      return res.json({ notifications: [] });
+    }
 
     let query = `
       SELECT * FROM erp.notifications
@@ -38,20 +48,13 @@ router.get('/', async (req, res) => {
 
     const result = await pool.query(query, params);
 
-    console.log('Found notifications:', result.rows.length);
-    console.log('Notification user_ids:', result.rows.map(r => r.user_id));
-
     res.json({
       notifications: result.rows,
     });
   } catch (error) {
-    console.error('❌ Get notifications error:', error);
-    console.error('Error message:', error.message);
-    console.error('Error stack:', error.stack);
-    res.status(500).json({ 
-      error: 'Failed to get notifications',
-      message: error.message || 'Internal server error' 
-    });
+    console.error('Get notifications error:', error.message);
+    // Return empty notifications instead of error to avoid breaking the UI
+    res.json({ notifications: [] });
   }
 });
 

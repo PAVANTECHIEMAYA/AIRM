@@ -1,9 +1,20 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { api } from "@/lib/api";
 import { toast } from "@/hooks/use-toast";
-import { Users as UsersIcon, Shield, User as UserIcon, RefreshCw } from "lucide-react";
+import { Users as UsersIcon, Shield, User as UserIcon, RefreshCw, UserPlus, Trash2 } from "lucide-react";
 
 interface UserProfile {
   id: string;
@@ -17,6 +28,11 @@ const Users = () => {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showAddDialog, setShowAddDialog] = useState(false);
+  const [newUserEmail, setNewUserEmail] = useState("");
+  const [newUserName, setNewUserName] = useState("");
+  const [newUserRole, setNewUserRole] = useState("user");
+  const [addingUser, setAddingUser] = useState(false);
 
   useEffect(() => {
     const initUsers = async () => {
@@ -129,6 +145,79 @@ const Users = () => {
     }
   };
 
+  const handleAddUser = async () => {
+    if (!newUserEmail) {
+      toast({
+        title: "Email Required",
+        description: "Please enter an email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setAddingUser(true);
+    try {
+      await api.users.create({
+        email: newUserEmail,
+        full_name: newUserName,
+        role: newUserRole,
+      });
+
+      toast({
+        title: "User Created",
+        description: `User ${newUserEmail} has been created successfully`,
+      });
+
+      setShowAddDialog(false);
+      setNewUserEmail("");
+      setNewUserName("");
+      setNewUserRole("user");
+      loadUsers();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create user",
+        variant: "destructive",
+      });
+    } finally {
+      setAddingUser(false);
+    }
+  };
+
+  const handleDeleteUser = async (userId: string, userEmail: string) => {
+    if (userId === currentUser?.id) {
+      toast({
+        title: "Cannot Delete",
+        description: "You cannot delete your own account",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ${userEmail}?`)) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await api.users.delete(userId);
+
+      toast({
+        title: "User Deleted",
+        description: `User ${userEmail} has been deleted`,
+      });
+      loadUsers();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete user",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-background p-4 md:p-8">
@@ -148,8 +237,65 @@ const Users = () => {
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-6">
+        <div className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-bold">User Management</h1>
+          <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
+            <DialogTrigger asChild>
+              <Button>
+                <UserPlus className="mr-2 h-4 w-4" />
+                Add User
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add New User</DialogTitle>
+                <DialogDescription>
+                  Create a new user account. They will receive a magic link to login.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email *</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="user@example.com"
+                    value={newUserEmail}
+                    onChange={(e) => setNewUserEmail(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input
+                    id="name"
+                    placeholder="John Doe"
+                    value={newUserName}
+                    onChange={(e) => setNewUserName(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="role">Role</Label>
+                  <select
+                    id="role"
+                    className="w-full px-3 py-2 border rounded-md bg-background"
+                    value={newUserRole}
+                    onChange={(e) => setNewUserRole(e.target.value)}
+                  >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleAddUser} disabled={addingUser}>
+                  {addingUser ? "Creating..." : "Create User"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <Card>
@@ -207,14 +353,27 @@ const Users = () => {
                         Joined: {new Date(user.created_at).toLocaleDateString()}
                       </p>
                     </div>
-                    <Button
-                      variant={user.role === "admin" ? "destructive" : "default"}
-                      size="sm"
-                      onClick={() => toggleUserRole(user.id, user.role)}
-                      disabled={loading || user.id === currentUser?.id}
-                    >
-                      {user.role === "admin" ? "Remove Admin" : "Make Admin"}
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant={user.role === "admin" ? "destructive" : "default"}
+                        size="sm"
+                        onClick={() => toggleUserRole(user.id, user.role)}
+                        disabled={loading || user.id === currentUser?.id}
+                      >
+                        {user.role === "admin" ? "Remove Admin" : "Make Admin"}
+                      </Button>
+                      {user.id !== currentUser?.id && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteUser(user.id, user.email)}
+                          disabled={loading}
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>

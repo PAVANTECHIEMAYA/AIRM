@@ -23,8 +23,8 @@ export async function getTimesheetByWeek(userId, weekStart) {
  */
 export async function createTimesheet(userId, weekStart, weekEnd) {
   const result = await pool.query(
-    `INSERT INTO erp.timesheets (user_id, week_start, week_end, status)
-     VALUES ($1, $2, $3, 'draft')
+    `INSERT INTO erp.timesheets (id, user_id, week_start, week_end, status)
+     VALUES (gen_random_uuid(), $1, $2, $3, 'draft')
      RETURNING id`,
     [userId, weekStart, weekEnd]
   );
@@ -144,11 +144,11 @@ export async function deleteManualEntries(timesheetId) {
 export async function createTimesheetEntry(timesheetId, entry) {
   const result = await pool.query(
     `INSERT INTO erp.timesheet_entries (
-      timesheet_id, project, task, source,
+      id, timesheet_id, project, task, source,
       mon_hours, tue_hours, wed_hours, thu_hours,
       fri_hours, sat_hours, sun_hours,
       created_at, updated_at
-    ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW(), NOW())
+    ) VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW(), NOW())
     RETURNING id`,
     [
       timesheetId,
@@ -223,8 +223,8 @@ export async function createTimesheetEntryForDay(timesheetId, project, task, day
 
   const result = await pool.query(
     `INSERT INTO erp.timesheet_entries 
-     (timesheet_id, project, task, mon_hours, tue_hours, wed_hours, thu_hours, fri_hours, sat_hours, sun_hours, source, created_at, updated_at)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'time_clock', NOW(), NOW())
+     (id, timesheet_id, project, task, mon_hours, tue_hours, wed_hours, thu_hours, fri_hours, sat_hours, sun_hours, source, created_at, updated_at)
+     VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'time_clock', NOW(), NOW())
      RETURNING id, ${dayColumn}`,
     [timesheetId, project, task, ...hoursValues]
   );
@@ -247,8 +247,8 @@ export async function getIssueDetails(issueId) {
  */
 export async function addIssueComment(issueId, userId, comment) {
   await pool.query(
-    `INSERT INTO erp.issue_comments (issue_id, user_id, comment)
-     VALUES ($1, $2, $3)`,
+    `INSERT INTO erp.issue_comments (id, issue_id, user_id, comment)
+     VALUES (gen_random_uuid(), $1, $2, $3)`,
     [issueId, userId, comment]
   );
 }
@@ -258,8 +258,8 @@ export async function addIssueComment(issueId, userId, comment) {
  */
 export async function addIssueActivity(issueId, userId, action, details) {
   await pool.query(
-    `INSERT INTO erp.issue_activity (issue_id, user_id, action, details)
-     VALUES ($1, $2, $3, $4)`,
+    `INSERT INTO erp.issue_activity (id, issue_id, user_id, action, details)
+     VALUES (gen_random_uuid(), $1, $2, $3, $4)`,
     [issueId, userId, action, JSON.stringify(details)]
   );
 }

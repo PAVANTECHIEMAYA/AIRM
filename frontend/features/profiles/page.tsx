@@ -770,60 +770,6 @@ const Profiles = () => {
                   <User className="h-4 w-4 mr-2" />
                   Upload User Profile
                 </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-xs text-muted-foreground">HR Document Templates</DropdownMenuLabel>
-
-                <DropdownMenuItem
-                  onClick={() => document.getElementById('experience-template-upload')?.click()}
-                  className="cursor-pointer"
-                >
-                  <BadgeCheck className="h-4 w-4 mr-2" />
-                  Experience Letter Template
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  onClick={() => document.getElementById('payslip-template-upload')?.click()}
-                  className="cursor-pointer"
-                >
-                  <FileSpreadsheet className="h-4 w-4 mr-2" />
-                  Payslip Template
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  onClick={() => document.getElementById('asset-handover-template-upload')?.click()}
-                  className="cursor-pointer"
-                >
-                  <Package className="h-4 w-4 mr-2" />
-                  Asset Handover Template
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  onClick={() => document.getElementById('relieving-letter-template-upload')?.click()}
-                  className="cursor-pointer"
-                >
-                  <ScrollText className="h-4 w-4 mr-2" />
-                  Relieving Letter Template
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-xs text-muted-foreground">Branding Assets</DropdownMenuLabel>
-
-                <DropdownMenuItem
-                  onClick={() => document.getElementById('logo-upload')?.click()}
-                  className="cursor-pointer"
-                >
-                  <ImageIcon className="h-4 w-4 mr-2" />
-                  Upload Company Logo
-                </DropdownMenuItem>
-
-                <DropdownMenuItem
-                  onClick={() => document.getElementById('signature-upload')?.click()}
-                  className="cursor-pointer"
-                >
-                  <PenTool className="h-4 w-4 mr-2" />
-                  Upload Signature Image
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

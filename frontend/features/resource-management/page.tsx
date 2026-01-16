@@ -6,11 +6,12 @@
 
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { UserCircle, DoorOpen, Receipt, FileText } from "lucide-react";
+import { UserCircle, DoorOpen, Receipt, FileText, UserPlus } from "lucide-react";
 import Profiles from "../profiles/page";
 import ExitFormalities from "../exit-formalities/page";
 import Payslips from "../payslips/page";
 import HRDocumentsPage from "../hr-documents/page";
+import JoiningFormList from "../joining-form/JoiningFormList";
 
 const ResourceManagement = () => {
   const location = useLocation();
@@ -20,6 +21,9 @@ const ResourceManagement = () => {
   const getInitialTab = () => {
     if (location.pathname === "/profiles" || location.pathname.startsWith("/profiles/")) {
       return "profiles";
+    }
+    if (location.pathname === "/joining-form" || location.pathname.startsWith("/joining-form/")) {
+      return "joining-form";
     }
     if (location.pathname === "/exit-formalities" || location.pathname.startsWith("/exit-formalities/")) {
       return "exit-formalities";
@@ -51,6 +55,8 @@ const ResourceManagement = () => {
     // Navigate to the corresponding route
     if (tabId === "profiles") {
       navigate("/profiles");
+    } else if (tabId === "joining-form") {
+      navigate("/joining-form");
     } else if (tabId === "exit-formalities") {
       navigate("/exit-formalities");
     } else if (tabId === "payslips") {
@@ -62,17 +68,18 @@ const ResourceManagement = () => {
 
   const tabs = [
     { id: "profiles", label: "Profiles", icon: UserCircle },
+    { id: "joining-form", label: "Joining Form", icon: UserPlus },
     { id: "exit-formalities", label: "Exit Formalities", icon: DoorOpen },
     { id: "payslips", label: "Payslips", icon: Receipt },
     { id: "hr-documents", label: "HR Documents", icon: FileText },
   ];
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col p-6">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900">Resource Management</h1>
         <p className="text-gray-600 mt-1">
-          Manage employee profiles, exit formalities, payslips, and HR documents
+          Manage employee profiles, joining forms, exit formalities, payslips, and HR documents
         </p>
       </div>
 
@@ -99,6 +106,7 @@ const ResourceManagement = () => {
       {/* Tab Content */}
       <div className="flex-1 overflow-auto">
         {activeTab === "profiles" && <Profiles />}
+        {activeTab === "joining-form" && <JoiningFormList />}
         {activeTab === "exit-formalities" && <ExitFormalities />}
         {activeTab === "payslips" && <Payslips />}
         {activeTab === "hr-documents" && <HRDocumentsPage />}

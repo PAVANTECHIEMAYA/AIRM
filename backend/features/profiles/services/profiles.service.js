@@ -150,17 +150,28 @@ export async function updateProfile(userId, profileData) {
  */
 export async function deleteProfile(userId) {
   console.log('[profiles.service] deleteProfile called for userId:', userId);
-  // Check if user exists
-  const exists = await profilesModel.userExists(userId);
-  console.log('[profiles.service] User exists:', exists);
-  if (!exists) {
+  
+  // Check if user exists first
+  const userExists = await profilesModel.userExists(userId);
+  console.log('[profiles.service] User exists:', userExists);
+  
+  if (!userExists) {
     throw new Error('User not found');
   }
 
-  // Delete profile row (do not delete user)
-  const result = await profilesModel.deleteProfileById(userId);
-  console.log('[profiles.service] Profile deleted, result:', result);
+  // Delete in order: profiles -> user_roles -> users (due to foreign key constraints)
+  // 1. Delete profile row (if exists)
+  const profileResult = await profilesModel.deleteProfileById(userId);
+  console.log('[profiles.service] Profile deleted, result:', profileResult.rowCount);
 
-  return { profile_id: userId };
+  // 2. Delete user roles
+  const roleResult = await profilesModel.deleteUserRoleById(userId);
+  console.log('[profiles.service] User roles deleted, result:', roleResult.rowCount);
+
+  // 3. Delete user
+  const userResult = await profilesModel.deleteUserById(userId);
+  console.log('[profiles.service] User deleted, result:', userResult.rowCount);
+
+  return { user_id: userId, deleted: true };
 }
 

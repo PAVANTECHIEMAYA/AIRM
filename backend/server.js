@@ -40,6 +40,7 @@ let timeClockRoutes = null;
 let leaveCalendarRoutes = null;
 let gitRoutes = null;
 let hrDocumentsRoutes = null;
+let joiningFormRoutes = null;
 
 // Legacy routes (temporary - for notifications and labels)
 import notificationsRoutes from './src/routes/notifications.js';
@@ -123,6 +124,8 @@ const loadRoutes = async () => {
   gitRoutes = await safeImport('./features/git/routes/git.routes.js');
   // HR documents feature - attempt to load the feature routes
   hrDocumentsRoutes = await safeImport('./features/hr-documents/routes/hr-documents.routes.js');
+  // Joining form feature - employee onboarding
+  joiningFormRoutes = await safeImport('./features/joining-form/routes/joining-form.routes.js');
 
   // Diagnostic: report which route modules loaded
   const loadedRoutes = {
@@ -140,6 +143,7 @@ const loadRoutes = async () => {
     leaveCalendar: Boolean(leaveCalendarRoutes),
     git: Boolean(gitRoutes),
     hrDocuments: Boolean(hrDocumentsRoutes),
+    joiningForm: Boolean(joiningFormRoutes),
   };
 
   console.log('[route-loader] Feature routes loaded:', Object.entries(loadedRoutes)
@@ -198,6 +202,7 @@ const loadRoutes = async () => {
   if (timeClockRoutes) app.use('/api/time-clock', timeClockRoutes);
   if (leaveCalendarRoutes) app.use('/api/leave-calendar', leaveCalendarRoutes);
   if (gitRoutes) app.use('/api/git', gitRoutes);
+  if (joiningFormRoutes) app.use('/api/joining-form', joiningFormRoutes);
   if (hrDocumentsRoutes) app.use('/api/hr-documents', hrDocumentsRoutes);
   else {
     // Fallback: provide minimal /api/hr-documents responses to avoid 404s in the UI

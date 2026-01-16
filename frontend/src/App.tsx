@@ -22,6 +22,7 @@ import LeaveCalendar from "@features/leave-calendar";
 import Git from "@features/git";
 import HRDocumentsPage from "@features/hr-documents";
 import TemplatesPage from "@features/hr-documents/templates-page";
+import JoiningFormPage from "@features/joining-form/page";
 // HRDocumentGenerator removed
 
 const queryClient = new QueryClient();
@@ -51,6 +52,16 @@ const App = () => (
               <AuthGuard>
                 <Layout>
                   <Projects />
+                </Layout>
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/projects/:id"
+            element={
+              <AuthGuard>
+                <Layout>
+                  <Issues />
                 </Layout>
               </AuthGuard>
             }
@@ -96,6 +107,26 @@ const App = () => (
             }
           />
           {/* Legacy routes - kept for backward compatibility */}
+          <Route
+            path="/joining-form"
+            element={
+              <AuthGuard>
+                <Layout>
+                  <ResourceManagement />
+                </Layout>
+              </AuthGuard>
+            }
+          />
+          <Route
+            path="/joining-form/:id"
+            element={
+              <AuthGuard>
+                <Layout>
+                  <JoiningFormPage />
+                </Layout>
+              </AuthGuard>
+            }
+          />
           <Route
             path="/profiles"
             element={

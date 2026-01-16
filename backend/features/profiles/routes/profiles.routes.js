@@ -8,6 +8,7 @@
 import express from 'express';
 import { authenticate } from '../../../core/auth/authMiddleware.js';
 import * as profilesController from '../controllers/profiles.controller.js';
+import * as documentController from '../controllers/document.controller.js';
 import * as extractionController from '../controllers/profile-extraction.controller.js';
 import * as templateController from '../controllers/template.controller.js';
 import { uploadSingle, uploadMultiple } from '../middleware/upload.middleware.js';
@@ -65,6 +66,78 @@ router.post('/save-edited', extractionController.saveEditedProfile);
  * Upload and save multiple profiles from Excel/CSV file
  */
 router.post('/upload-batch', uploadSingle, extractionController.uploadBatchProfiles);
+
+/**
+ * POST /api/profiles/upload-document
+ * Upload a single document (simplified endpoint)
+ */
+router.post('/upload-document', uploadSingle, documentController.uploadDocumentSimplified);
+
+/**
+ * GET /api/profiles/categories
+ * Get document categories and types
+ */
+router.get('/categories', documentController.getDocumentCategories);
+
+/**
+ * GET /api/profiles/documents/status/:status
+ * Get documents by verification status (admin only)
+ */
+router.get('/documents/status/:status', documentController.getDocumentsByStatus);
+
+/**
+ * GET /api/profiles/documents/all
+ * Get all documents (admin only)
+ */
+router.get('/documents/all', documentController.getAllDocuments);
+
+/**
+ * GET /api/profiles/:id/documents
+ * Get all documents for an employee
+ */
+router.get('/:id/documents', documentController.getEmployeeDocuments);
+
+/**
+ * GET /api/profiles/:id/documents/category/:category
+ * Get documents by category for an employee
+ */
+router.get('/:id/documents/category/:category', documentController.getEmployeeDocumentsByCategory);
+
+/**
+ * POST /api/profiles/:id/documents
+ * Upload a new document for an employee
+ */
+router.post('/:id/documents', uploadSingle, documentController.uploadDocument);
+
+/**
+ * GET /api/profiles/documents/:docId
+ * Get document by ID
+ */
+router.get('/documents/:docId', documentController.getDocumentById);
+
+/**
+ * PUT /api/profiles/documents/:docId/status
+ * Update document verification status
+ */
+router.put('/documents/:docId/status', documentController.updateDocumentStatus);
+
+/**
+ * DELETE /api/profiles/documents/:docId
+ * Delete document
+ */
+router.delete('/documents/:docId', documentController.deleteDocument);
+
+/**
+ * GET /api/profiles/documents/:docId/download
+ * Download document
+ */
+router.get('/documents/:docId/download', documentController.downloadDocument);
+
+/**
+ * GET /api/profiles/documents/:docId/preview
+ * Get document preview
+ */
+router.get('/documents/:docId/preview', documentController.getDocumentPreview);
 
 /**
  * GET /api/profiles/:id

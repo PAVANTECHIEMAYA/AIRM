@@ -100,10 +100,14 @@ export function Sidebar({ onLogout }: SidebarProps) {
           const isActive = location.pathname === item.path || 
             (item.path === '/resource-management' && 
              (location.pathname === '/profiles' || 
+              location.pathname === '/joining-form' ||
               location.pathname === '/exit-formalities' || 
               location.pathname === '/payslips' ||
+              location.pathname === '/hr-documents' ||
               location.pathname.startsWith('/profiles/') ||
+              location.pathname.startsWith('/joining-form/') ||
               location.pathname.startsWith('/exit-formalities/') ||
+              location.pathname.startsWith('/hr-documents/') ||
               location.pathname.startsWith('/payslips/')));
           
           return (

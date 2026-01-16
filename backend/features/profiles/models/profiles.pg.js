@@ -220,3 +220,23 @@ export async function deleteProfileById(userId) {
   return result;
 }
 
+/**
+ * Delete user role by user id
+ */
+export async function deleteUserRoleById(userId) {
+  console.log('[profiles.model] Deleting user_roles for userId:', userId);
+  const result = await pool.query('DELETE FROM erp.user_roles WHERE user_id = $1 RETURNING user_id', [userId]);
+  console.log('[profiles.model] Delete user_roles result:', result.rowCount, 'rows deleted');
+  return result;
+}
+
+/**
+ * Delete user by id
+ */
+export async function deleteUserById(userId) {
+  console.log('[profiles.model] Deleting user for userId:', userId);
+  const result = await pool.query('DELETE FROM erp.users WHERE id = $1 RETURNING id', [userId]);
+  console.log('[profiles.model] Delete user result:', result.rowCount, 'rows deleted');
+  return result;
+}
+

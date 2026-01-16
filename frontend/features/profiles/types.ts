@@ -4,6 +4,85 @@
  */
 
 /**
+ * Document Categories and Types
+ */
+export const DOCUMENT_CATEGORIES = {
+  KYC_DOCUMENTS: 'KYC Documents',
+  EDUCATION_CERTIFICATES: 'Education Certificates',
+  EXPERIENCE_DOCUMENTS: 'Experience Documents',
+  OTHER: 'Other'
+} as const;
+
+export const DOCUMENT_TYPES = {
+  [DOCUMENT_CATEGORIES.KYC_DOCUMENTS]: [
+    'Aadhaar',
+    'Electricity / Utility Bill',
+    'PAN'
+  ],
+  [DOCUMENT_CATEGORIES.EDUCATION_CERTIFICATES]: [
+    'SSC',
+    'HSC',
+    'Graduation',
+    'Post Graduation'
+  ],
+  [DOCUMENT_CATEGORIES.EXPERIENCE_DOCUMENTS]: [
+    'Experience Letter',
+    'Previous Company Salary Slips',
+    'Previous Company Offer / Appointment Letter'
+  ],
+  [DOCUMENT_CATEGORIES.OTHER]: [
+    'Reference Letter',
+    'Recommendation',
+    'Miscellaneous'
+  ]
+} as const;
+
+/**
+ * Document DTO
+ */
+export interface EmployeeDocument {
+  id: string;
+  employee_id: string;
+  document_category: string;
+  document_type: string;
+  file_name: string;
+  file_path: string;
+  file_type: string;
+  uploaded_at: string;
+  uploaded_by: string;
+  verification_status: 'pending' | 'approved' | 'rejected';
+  remarks?: string;
+  verified_at?: string;
+  verified_by?: string;
+}
+
+/**
+ * Document Upload Request
+ */
+export interface UploadDocumentRequest {
+  document_category: string;
+  document_type: string;
+  file: File;
+}
+
+/**
+ * Document API Response Types
+ */
+export interface GetDocumentsResponse {
+  documents: EmployeeDocument[];
+}
+
+export interface UploadDocumentResponse {
+  message: string;
+  document: EmployeeDocument;
+}
+
+export interface UpdateDocumentStatusResponse {
+  message: string;
+  document: EmployeeDocument;
+}
+
+/**
  * Employee Profile DTO
  */
 export interface EmployeeProfile {

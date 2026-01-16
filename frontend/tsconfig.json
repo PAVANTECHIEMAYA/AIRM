@@ -27,7 +27,7 @@
       "@features/*": ["./features/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "features"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
 

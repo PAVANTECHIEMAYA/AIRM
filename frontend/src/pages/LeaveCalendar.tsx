@@ -53,8 +53,8 @@ export default function LeaveCalendar() {
       }
 
         setCurrentUser(userData);
-        const currentUserResp = await api.auth.getMe() as any;
-        const adminStatus = currentUserResp?.user?.role === 'admin';
+        // Check user role from localStorage
+        const adminStatus = userData.role === 'admin';
         setIsAdmin(adminStatus);
         
         await loadMyLeaveRequests(userData.id);
@@ -208,14 +208,28 @@ export default function LeaveCalendar() {
   // Calendar rendering
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(currentMonth);
-  const monthDays = eachDayOfInterval({ start: monthStart, end: monthEnd });
+  
+  // Get the start of the calendar grid (includes padding from previous month)
+  const calendarStart = startOfMonth(monthStart);
+  const startDay = calendarStart.getDay();
+  const calendarGridStart = new Date(monthStart);
+  calendarGridStart.setDate(monthStart.getDate() - startDay);
+  
+  // Get all days for the calendar grid (6 weeks * 7 days)
+  const calendarGridEnd = new Date(calendarGridStart);
+  calendarGridEnd.setDate(calendarGridStart.getDate() + 41);
+  
+  const monthDays = eachDayOfInterval({ start: calendarGridStart, end: calendarGridEnd });
 
   // Get leave days for calendar highlighting
   const leaveDays = myLeaveRequests
     .filter(req => req.status === 'approved')
     .flatMap(req => {
-      const start = new Date(req.start_date);
-      const end = new Date(req.end_date);
+      // Parse dates properly to avoid timezone issues
+      const [startYear, startMonth, startDay] = req.start_date.split('-').map(Number);
+      const [endYear, endMonth, endDay] = req.end_date.split('-').map(Number);
+      const start = new Date(startYear, startMonth - 1, startDay);
+      const end = new Date(endYear, endMonth - 1, endDay);
       return eachDayOfInterval({ start, end });
     });
 

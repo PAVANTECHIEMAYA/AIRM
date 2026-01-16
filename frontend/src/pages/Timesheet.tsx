@@ -76,9 +76,8 @@ const Timesheet = () => {
         if (userData.id) {
           setUser(userData);
           setSelectedUserId(userData.id);
-          // Get user role from API
-          const currentUser = await api.auth.getMe() as any;
-          const adminStatus = currentUser?.user?.role === 'admin';
+          // Check user role from localStorage
+          const adminStatus = userData.role === 'admin';
           setIsAdmin(adminStatus);
           if (adminStatus) {
             await loadUsers();
@@ -510,8 +509,11 @@ const Timesheet = () => {
       };
       
       // Process all entries - convert hours to numbers
+      // Filter out leave entries - they should be displayed separately in a leave section
       console.log(`🔄 Processing ${allEntries.length} entries for display...`);
-      const regularEntries: TimesheetEntry[] = allEntries.map((entry: any, idx: number) => {
+      const regularEntries: TimesheetEntry[] = allEntries
+        .filter((entry: any) => entry.source !== 'leave') // Exclude leave entries
+        .map((entry: any, idx: number) => {
         const processed = {
           id: entry.id || `entry-${firstTimesheetId || 'new'}-${idx}-${Date.now()}`,
           project: entry.project || '',

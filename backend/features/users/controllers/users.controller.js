@@ -110,3 +110,96 @@ export async function updateUserRole(req, res) {
   }
 }
 
+/**
+ * Create a new user (Admin only)
+ * POST /api/users
+ */
+export async function createUser(req, res) {
+  console.log('📝 Create user request received:', req.body);
+  try {
+    const { email, full_name, role } = req.body;
+
+    if (!email) {
+      console.log('❌ Email missing');
+      return res.status(400).json({
+        error: 'Email required',
+        message: 'Email is required to create a user'
+      });
+    }
+
+    try {
+      console.log('🔄 Calling createUser service...');
+      const user = await usersService.createUser(email, full_name, role);
+      console.log('✅ User created successfully:', user.email);
+      res.status(201).json({
+        message: 'User created successfully',
+        user
+      });
+    } catch (error) {
+      console.log('❌ Service error:', error.message);
+      if (error.message === 'Invalid email') {
+        return res.status(400).json({ 
+          error: 'Invalid email',
+          message: 'Please provide a valid email address' 
+        });
+      }
+      
+      if (error.message === 'User already exists') {
+        return res.status(409).json({ 
+          error: 'User exists',
+          message: 'A user with this email already exists' 
+        });
+      }
+
+      if (error.message === 'Invalid role') {
+        return res.status(400).json({ 
+          error: 'Invalid role',
+          message: 'Role must be "admin" or "user"' 
+        });
+      }
+      
+      throw error;
+    }
+  } catch (error) {
+    console.error('❌ Create user error:', error);
+    res.status(500).json({ 
+      error: 'Failed to create user',
+      message: 'Internal server error' 
+    });
+  }
+}
+
+/**
+ * Delete a user (Admin only)
+ * DELETE /api/users/:id
+ */
+export async function deleteUser(req, res) {
+  try {
+    const { id } = req.params;
+    const currentUserId = req.userId;
+
+    if (id === currentUserId) {
+      return res.status(400).json({
+        error: 'Cannot delete self',
+        message: 'You cannot delete your own account'
+      });
+    }
+
+    try {
+      await usersService.deleteUser(id);
+      res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+      if (error.message === 'User not found') {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      throw error;
+    }
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ 
+      error: 'Failed to delete user',
+      message: 'Internal server error' 
+    });
+  }
+}
+

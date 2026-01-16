@@ -23,13 +23,14 @@ import { toast } from "@/hooks/use-toast";
 import type { EmployeeProfile } from "@/sdk/features/profiles";
 import type { EmployeeAsset } from "../../exit-formalities/types";
 import { PfManagementSection } from "./PfManagementSection";
+import { DocumentList } from "./DocumentList";
 import { getInitials, getBurnoutLevel } from "../utils";
 
 interface ProfileDetailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   profile: EmployeeProfile | null;
-  activeTab: string;
+  activeTab: 'basic' | 'contact' | 'skills' | 'experience' | 'projects' | 'education' | 'performance' | 'burnout' | 'hr-payroll' | 'documents' | 'assets' | 'activity';
   onTabChange: (tab: string) => void;
   canEdit: boolean;
   onEdit: () => void;
@@ -62,6 +63,7 @@ export const ProfileDetailDialog = ({
 }: ProfileDetailDialogProps) => {
   const [copiedUuid, setCopiedUuid] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [uploadFiles, setUploadFiles] = useState<{ [key: string]: File | null }>({});
 
   if (!profile) return null;
 
@@ -621,6 +623,10 @@ export const ProfileDetailDialog = ({
                       <Label className="text-xs text-gray-500">Reporting Manager</Label>
                       <p className="text-sm font-medium">{profile.reporting_manager || 'N/A'}</p>
                     </div>
+                    <div className="col-span-2">
+                      <Label className="text-xs text-gray-500">Employee Background Verification Details</Label>
+                      <p className="text-sm font-medium whitespace-pre-wrap">{profile.background_verification || 'N/A'}</p>
+                    </div>
                   </div>
                   <div className="border-t pt-4">
                     <h4 className="text-sm font-semibold mb-2">Payroll Documents</h4>
@@ -689,36 +695,194 @@ export const ProfileDetailDialog = ({
 
           {/* Documents */}
           {activeTab === 'documents' && (
-            <div className="space-y-4">
-              {profile.documents && profile.documents.length > 0 ? (
-                <div className="space-y-2">
-                  {profile.documents.map((doc: any, idx: number) => (
-                    <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <FileText className="h-5 w-5 text-gray-400" />
-                        <div>
-                          <p className="text-sm font-medium">{doc.name || doc.type || 'Document'}</p>
-                          {doc.uploaded_date && (
-                            <p className="text-xs text-gray-400">
-                              Uploaded: {format(new Date(doc.uploaded_date), "MMM dd, yyyy")}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                      {doc.url && (
-                        <Button variant="outline" size="sm" asChild>
-                          <a href={doc.url} target="_blank" rel="noopener noreferrer">
-                            <Download className="h-4 w-4 mr-2" />
-                            Download
-                          </a>
-                        </Button>
-                      )}
+            <div className="space-y-6">
+              {/* Document Upload Section */}
+              {(currentUser?.role === 'admin' || currentUser?.role === 'hr' || currentUser?.id === profile.id) && (
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold mb-6">Upload Documents</h3>
+                  
+                  {/* KYC Documents */}
+                  <div className="mb-6">
+                    <h4 className="text-md font-semibold text-gray-700 mb-3 pb-2 border-b">KYC Documents</h4>
+                    <div className="space-y-3">
+                      {[
+                        { label: 'Aadhaar', type: 'aadhaar' },
+                        { label: 'Electricity / Utility Bill', type: 'utility_bill' },
+                        { label: 'PAN', type: 'pan' },
+                      ].map((doc) => (
+                        <form
+                          key={doc.type}
+                          className="grid grid-cols-1 md:grid-cols-[200px_1fr_auto] gap-3 items-center p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+                          onSubmit={async (e) => {
+                            e.preventDefault();
+                            const file = uploadFiles[doc.type] || null;
+                            if (!file) {
+                              toast({ title: 'Error', description: `Please select a file for ${doc.label}.`, variant: 'destructive' });
+                              return;
+                            }
+                            try {
+                              const formData = new FormData();
+                              formData.append('file', file);
+                              formData.append('type', doc.type);
+                              formData.append('user_id', profile.id);
+                              const token = localStorage.getItem('auth_token') || localStorage.getItem('token');
+                              const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/profiles/upload-document`, {
+                                method: 'POST',
+                                body: formData,
+                                headers: { 'Authorization': `Bearer ${token || ''}` },
+                              });
+                              const result = await response.json();
+                              if (!response.ok) throw new Error(result.message || 'Upload failed');
+                              toast({ title: 'Success', description: result.message || `${doc.label} uploaded.` });
+                              setUploadFiles((prev: any) => ({ ...prev, [doc.type]: null }));
+                              window.location.reload();
+                            } catch (error: any) {
+                              toast({ title: 'Error', description: error.message || `Failed to upload ${doc.label}`, variant: 'destructive' });
+                            }
+                          }}
+                        >
+                          <Label htmlFor={`file-${doc.type}`} className="font-medium text-sm">{doc.label}</Label>
+                          <input
+                            id={`file-${doc.type}`}
+                            type="file"
+                            title={`Upload ${doc.label}`}
+                            className="border rounded px-3 py-2 text-sm w-full"
+                            accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                            onChange={(e) => setUploadFiles((prev: any) => ({ ...prev, [doc.type]: e.target.files?.[0] || null }))}
+                            required
+                            aria-label={`Upload ${doc.label}`}
+                          />
+                          <Button type="submit" variant="outline" size="sm" title={`Upload ${doc.label}`} className="whitespace-nowrap">
+                            Upload
+                          </Button>
+                        </form>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-gray-500">No documents available</p>
+                  </div>
+
+                  {/* Education Certificates */}
+                  <div className="mb-6">
+                    <h4 className="text-md font-semibold text-gray-700 mb-3 pb-2 border-b">Education Certificates</h4>
+                    <div className="space-y-3">
+                      {[
+                        { label: 'SSC', type: 'ssc' },
+                        { label: 'HSC', type: 'hsc' },
+                        { label: 'Graduation', type: 'graduation' },
+                        { label: 'Post Graduation', type: 'post_graduation' },
+                      ].map((doc) => (
+                        <form
+                          key={doc.type}
+                          className="grid grid-cols-1 md:grid-cols-[200px_1fr_auto] gap-3 items-center p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+                          onSubmit={async (e) => {
+                            e.preventDefault();
+                            const file = uploadFiles[doc.type] || null;
+                            if (!file) {
+                              toast({ title: 'Error', description: `Please select a file for ${doc.label}.`, variant: 'destructive' });
+                              return;
+                            }
+                            try {
+                              const formData = new FormData();
+                              formData.append('file', file);
+                              formData.append('type', doc.type);
+                              formData.append('user_id', profile.id);
+                              const token = localStorage.getItem('auth_token') || localStorage.getItem('token');
+                              const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/profiles/upload-document`, {
+                                method: 'POST',
+                                body: formData,
+                                headers: { 'Authorization': `Bearer ${token || ''}` },
+                              });
+                              const result = await response.json();
+                              if (!response.ok) throw new Error(result.message || 'Upload failed');
+                              toast({ title: 'Success', description: result.message || `${doc.label} uploaded.` });
+                              setUploadFiles((prev: any) => ({ ...prev, [doc.type]: null }));
+                              window.location.reload();
+                            } catch (error: any) {
+                              toast({ title: 'Error', description: error.message || `Failed to upload ${doc.label}`, variant: 'destructive' });
+                            }
+                          }}
+                        >
+                          <Label htmlFor={`file-${doc.type}`} className="font-medium text-sm">{doc.label}</Label>
+                          <input
+                            id={`file-${doc.type}`}
+                            type="file"
+                            title={`Upload ${doc.label}`}
+                            className="border rounded px-3 py-2 text-sm w-full"
+                            accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                            onChange={(e) => setUploadFiles((prev: any) => ({ ...prev, [doc.type]: e.target.files?.[0] || null }))}
+                            required
+                            aria-label={`Upload ${doc.label}`}
+                          />
+                          <Button type="submit" variant="outline" size="sm" title={`Upload ${doc.label}`} className="whitespace-nowrap">
+                            Upload
+                          </Button>
+                        </form>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Experience Documents */}
+                  <div>
+                    <h4 className="text-md font-semibold text-gray-700 mb-3 pb-2 border-b">Experience Documents</h4>
+                    <div className="space-y-3">
+                      {[
+                        { label: 'Experience Letter', type: 'experience_letter' },
+                        { label: 'Previous Company Salary Slips', type: 'salary_slip' },
+                        { label: 'Previous Company Offer / Appointment Letter', type: 'offer_letter' },
+                      ].map((doc) => (
+                        <form
+                          key={doc.type}
+                          className="grid grid-cols-1 md:grid-cols-[200px_1fr_auto] gap-3 items-center p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+                          onSubmit={async (e) => {
+                            e.preventDefault();
+                            const file = uploadFiles[doc.type] || null;
+                            if (!file) {
+                              toast({ title: 'Error', description: `Please select a file for ${doc.label}.`, variant: 'destructive' });
+                              return;
+                            }
+                            try {
+                              const formData = new FormData();
+                              formData.append('file', file);
+                              formData.append('type', doc.type);
+                              formData.append('user_id', profile.id);
+                              const token = localStorage.getItem('auth_token') || localStorage.getItem('token');
+                              const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/api/profiles/upload-document`, {
+                                method: 'POST',
+                                body: formData,
+                                headers: { 'Authorization': `Bearer ${token || ''}` },
+                              });
+                              const result = await response.json();
+                              if (!response.ok) throw new Error(result.message || 'Upload failed');
+                              toast({ title: 'Success', description: result.message || `${doc.label} uploaded.` });
+                              setUploadFiles((prev: any) => ({ ...prev, [doc.type]: null }));
+                              window.location.reload();
+                            } catch (error: any) {
+                              toast({ title: 'Error', description: error.message || `Failed to upload ${doc.label}`, variant: 'destructive' });
+                            }
+                          }}
+                        >
+                          <Label htmlFor={`file-${doc.type}`} className="font-medium text-sm">{doc.label}</Label>
+                          <input
+                            id={`file-${doc.type}`}
+                            type="file"
+                            title={`Upload ${doc.label}`}
+                            className="border rounded px-3 py-2 text-sm w-full"
+                            accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                            onChange={(e) => setUploadFiles((prev: any) => ({ ...prev, [doc.type]: e.target.files?.[0] || null }))}
+                            required
+                            aria-label={`Upload ${doc.label}`}
+                          />
+                          <Button type="submit" variant="outline" size="sm" title={`Upload ${doc.label}`} className="whitespace-nowrap">
+                            Upload
+                          </Button>
+                        </form>
+                      ))}
+                    </div>
+                  </div>
+                </Card>
               )}
+
+              {/* Document List Section */}
+              <DocumentList profileId={profile.id} />
             </div>
           )}
 

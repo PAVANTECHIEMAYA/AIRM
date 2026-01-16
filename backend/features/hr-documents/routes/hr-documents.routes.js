@@ -393,4 +393,43 @@ function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (s) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s]));
 }
 
+// Generate DOCX from template and data (returns merged DOCX file)
+router.post('/generate/docx', express.json(), async (req, res) => {
+  try {
+    const { templateId, data } = req.body;
+    if (!templateId) return res.status(400).json({ success: false, error: 'templateId is required' });
+
+    const templatePath = path.join(uploadsDir, templateId);
+    if (!await fs.pathExists(templatePath)) return res.status(404).json({ success: false, error: 'Template not found' });
+
+    const ext = path.extname(templatePath).toLowerCase();
+    if (ext !== '.docx') {
+      return res.status(400).json({ success: false, error: 'Only DOCX templates are supported for DOCX download' });
+    }
+
+    // Read the DOCX file as a buffer
+    let docxBuffer = await fs.readFile(templatePath);
+
+    // Use docxtemplater to merge data into the DOCX
+    const PizZip = (await import('pizzip')).default;
+    const Docxtemplater = (await import('docxtemplater')).default;
+    const zip = new PizZip(docxBuffer);
+    const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+    doc.setData(data || {});
+    try {
+      doc.render();
+    } catch (error) {
+      return res.status(500).json({ success: false, error: 'Failed to merge DOCX: ' + error.message });
+    }
+    const mergedBuffer = doc.getZip().generate({ type: 'nodebuffer' });
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    res.setHeader('Content-Disposition', `attachment; filename="${(templateId || 'document').replace(/\.[^.]+$/, '')}_merged.docx"`);
+    res.send(mergedBuffer);
+  } catch (err) {
+    console.error('DOCX generation error:', err);
+    res.status(500).json({ success: false, error: 'Failed to generate DOCX' });
+  }
+});
+
 export default router;

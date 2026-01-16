@@ -103,8 +103,8 @@ export async function deleteProfile(req, res) {
     res.json({ message: 'Profile deleted successfully', ...result });
   } catch (error) {
     console.error('[profiles] Delete profile error:', error);
-    if (error.message === 'User not found') {
-      return res.status(404).json({ error: 'User not found' });
+    if (error.message === 'User not found' || error.message === 'Profile not found') {
+      return res.status(404).json({ error: 'Profile not found', message: 'Profile not found' });
     }
     res.status(500).json({ error: 'Failed to delete profile', message: error.message || 'Internal server error' });
   }

@@ -9,6 +9,15 @@ const OUTPUT_FORMATS = [
   { value: 'html', label: 'HTML' },
 ];
 
+const DOCUMENT_TYPES: { value: string; label: string }[] = [
+  { value: 'payslip', label: 'Payslip' },
+  { value: 'offer-letter', label: 'Offer Letter' },
+  { value: 'appointment-letter', label: 'Appointment Letter' },
+  { value: 'experience-letter', label: 'Experience Letter' },
+  { value: 'relieving-letter', label: 'Relieving Letter' },
+  { value: 'custom', label: 'Custom Document' },
+];
+
 interface EmployeeData {
   employeeName: string;
   employeeId: string;
@@ -143,12 +152,10 @@ const HRDocumentGenerator: React.FC = () => {
       if (data.success) {
         setMessage({ type: 'success', text: 'Template uploaded successfully!' });
         // Select the newly uploaded template and switch to Generate tab
-      const response = await fetch(`${apiBase}/api/hr-documents/generate/preview`, {
-            setSelectedTemplate(data.template.id);
-            setDocumentType(data.template.documentType || documentType);
-            // setActiveTab('generate'); // Stay on upload tab to show preview
-          }
-        } catch (e) { }
+        setSelectedTemplate(data.template.id);
+        setDocumentType(data.template.documentType || documentType);
+        // setActiveTab('generate'); // Stay on upload tab to show preview
+
         // Refresh template list (unfiltered) to ensure newly uploaded template appears
         try {
           console.log('[hr-documents] upload response:', data);
@@ -174,7 +181,6 @@ const HRDocumentGenerator: React.FC = () => {
     } catch (error) {
       setMessage({ type: 'error', text: 'Failed to upload template' });
     } finally {
-            const previewResp = await fetch(`${apiBase}/api/hr-documents/generate/preview`, {
       setUploadProgress(100);
     }
   }, [documentType]);

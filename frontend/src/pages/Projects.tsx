@@ -90,7 +90,7 @@ const Projects = () => {
   };
 
   const handleProjectClick = (projectId: number) => {
-    navigate(`/projects/${projectId}`);
+    navigate(`/issues?project=${projectId}`);
   };
 
   if (loading) {

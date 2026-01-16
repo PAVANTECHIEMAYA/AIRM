@@ -15,12 +15,18 @@ export async function getTimesheets(req, res) {
   try {
     const userId = req.userId;
     
-    // Check if user is admin
-    const roleResult = await pool.query(
-      'SELECT role FROM erp.user_roles WHERE user_id = $1',
-      [userId]
-    );
-    const isAdmin = roleResult.rows.length > 0 && roleResult.rows[0].role === 'admin';
+    // Check if user is admin with error handling
+    let isAdmin = false;
+    try {
+      const roleResult = await pool.query(
+        'SELECT role FROM erp.user_roles WHERE user_id = $1',
+        [userId]
+      );
+      isAdmin = roleResult.rows.length > 0 && roleResult.rows[0].role === 'admin';
+    } catch (roleError) {
+      console.warn('Warning: Could not fetch user role:', roleError.message);
+      isAdmin = false;
+    }
     
     const { week_start, user_id } = req.query;
 
@@ -59,12 +65,18 @@ export async function saveTimesheet(req, res) {
 
     const userId = req.userId;
     
-    // Check if user is admin
-    const roleResult = await pool.query(
-      'SELECT role FROM erp.user_roles WHERE user_id = $1',
-      [userId]
-    );
-    const isAdmin = roleResult.rows.length > 0 && roleResult.rows[0].role === 'admin';
+    // Check if user is admin with error handling
+    let isAdmin = false;
+    try {
+      const roleResult = await pool.query(
+        'SELECT role FROM erp.user_roles WHERE user_id = $1',
+        [userId]
+      );
+      isAdmin = roleResult.rows.length > 0 && roleResult.rows[0].role === 'admin';
+    } catch (roleError) {
+      console.warn('Warning: Could not fetch user role:', roleError.message);
+      isAdmin = false;
+    }
     
     const { week_start, entries, user_id } = req.body;
 

@@ -342,6 +342,7 @@ const HRDocumentsPage: React.FC = () => {
     }
   };
 
+  // Improved PDF download logic
   const handleDownloadPdf = async () => {
     if (!template?.id) return;
     try {
@@ -366,6 +367,34 @@ const HRDocumentsPage: React.FC = () => {
     } catch (e) {
       console.error('PDF download error', e);
       alert('PDF download failed');
+    }
+  };
+
+  // Improved DOCX download logic
+  const handleDownloadDocx = async () => {
+    if (!template?.id) return;
+    try {
+      const resp = await fetch(`${API_BASE}/hr-documents/generate/docx`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ templateId: template.id, data: employeeData }),
+      });
+      if (!resp.ok) {
+        alert('DOCX generation failed');
+        return;
+      }
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${(template.name || 'document').replace(/\.[^.]+$/, '')}.docx`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('DOCX download error', e);
+      alert('DOCX download failed');
     }
   };
 
@@ -542,7 +571,23 @@ const HRDocumentsPage: React.FC = () => {
           
           <div className="bg-white border rounded-lg overflow-hidden max-h-[calc(100vh-14rem)] overflow-y-auto">
             {template ? (
-              <DocumentPreview template={templateForPreview} employeeData={employeeData} onDownloadPdf={handleDownloadPdf} onRefresh={handleRefreshPreview} />
+              <>
+                <div className="flex gap-2 mb-4">
+                  <button
+                    onClick={handleDownloadDocx}
+                    className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Download DOCX
+                  </button>
+                  <button
+                    onClick={handleDownloadPdf}
+                    className="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                  >
+                    Download PDF
+                  </button>
+                </div>
+                <DocumentPreview template={templateForPreview} employeeData={employeeData} onDownloadPdf={handleDownloadPdf} onRefresh={handleRefreshPreview} />
+              </>
             ) : (
               <div className="p-8 text-center text-gray-500">
                 <FileText className="h-12 w-12 mx-auto mb-4 text-gray-300" />

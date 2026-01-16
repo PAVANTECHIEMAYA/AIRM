@@ -93,3 +93,76 @@ export async function updateUserRole(userId, role) {
   return { user_id: userId, role };
 }
 
+/**
+ * Create a new user (Admin only)
+ */
+export async function createUser(email, fullName, role = 'user') {
+  // Validate email
+  if (!email || !email.includes('@')) {
+    throw new Error('Invalid email');
+  }
+
+  // Validate role
+  if (role && !['admin', 'user'].includes(role)) {
+    throw new Error('Invalid role');
+  }
+
+  // Check if user already exists
+  const existingUser = await pool.query(
+    'SELECT id FROM erp.users WHERE email = $1',
+    [email.toLowerCase()]
+  );
+
+  if (existingUser.rows.length > 0) {
+    throw new Error('User already exists');
+  }
+
+  // Create user
+  const userResult = await pool.query(
+    `INSERT INTO erp.users (id, email, full_name, created_at, updated_at)
+     VALUES (gen_random_uuid(), $1, $2, NOW(), NOW())
+     RETURNING id, email, full_name, created_at`,
+    [email.toLowerCase(), fullName || '']
+  );
+
+  const newUser = userResult.rows[0];
+
+  // Create user role
+  await pool.query(
+    `INSERT INTO erp.user_roles (id, user_id, role, created_at, updated_at)
+     VALUES (gen_random_uuid(), $1, $2, NOW(), NOW())`,
+    [newUser.id, role]
+  );
+
+  return {
+    id: newUser.id,
+    email: newUser.email,
+    full_name: newUser.full_name,
+    role: role,
+    created_at: newUser.created_at
+  };
+}
+
+/**
+ * Delete a user (Admin only)
+ */
+export async function deleteUser(userId) {
+  // Check if user exists
+  const userCheck = await pool.query(
+    'SELECT id FROM erp.users WHERE id = $1',
+    [userId]
+  );
+
+  if (userCheck.rows.length === 0) {
+    throw new Error('User not found');
+  }
+
+  // Delete user roles first
+  await pool.query('DELETE FROM erp.user_roles WHERE user_id = $1', [userId]);
+
+  // Delete user
+  await pool.query('DELETE FROM erp.users WHERE id = $1', [userId]);
+
+  return { deleted: true };
+}
+

@@ -20,14 +20,17 @@ export async function clockIn(req, res) {
 
     const userId = req.userId;
     const clockInData = req.body;
+    console.log('⏱️ Clock-in request:', { userId, clockInData });
 
     try {
       const entry = await timeClockService.clockIn(userId, clockInData);
+      console.log('✅ Clock-in successful:', entry.id);
       res.status(201).json({
         message: 'Clocked in successfully',
         entry,
       });
     } catch (error) {
+      console.error('❌ Clock-in service error:', error.message);
       if (error.message === 'Already clocked in') {
         return res.status(400).json({ 
           error: 'Already clocked in',
@@ -37,10 +40,11 @@ export async function clockIn(req, res) {
       throw error;
     }
   } catch (error) {
-    console.error('Clock in error:', error);
+    console.error('❌ Clock in error:', error);
+    console.error('❌ Clock in error stack:', error.stack);
     res.status(500).json({ 
       error: 'Failed to clock in',
-      message: 'Internal server error' 
+      message: error.message || 'Internal server error' 
     });
   }
 }
@@ -169,12 +173,18 @@ export async function getEntries(req, res) {
   try {
     const userId = req.userId;
     
-    // Check if user is admin
-    const roleResult = await pool.query(
-      'SELECT role FROM erp.user_roles WHERE user_id = $1',
-      [userId]
-    );
-    const isAdmin = roleResult.rows[0]?.role === 'admin';
+    // Check if user is admin with error handling
+    let isAdmin = false;
+    try {
+      const roleResult = await pool.query(
+        'SELECT role FROM erp.user_roles WHERE user_id = $1',
+        [userId]
+      );
+      isAdmin = roleResult.rows[0]?.role === 'admin' || false;
+    } catch (roleError) {
+      console.warn('Warning: Could not fetch user role:', roleError.message);
+      isAdmin = false;
+    }
     
     const filters = {
       start_date: req.query.start_date,

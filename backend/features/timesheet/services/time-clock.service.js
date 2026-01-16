@@ -12,15 +12,18 @@ import * as utils from './timesheet-utils.service.js';
  */
 export async function clockIn(userId, clockInData) {
   const { issue_id, project_name, latitude, longitude, location_address } = clockInData;
+  console.log('🔵 Time clock service - checking for active entry:', userId);
 
   // Check if user already has an active clock-in
   const activeEntry = await timeClockModel.getActiveEntry(userId);
   if (activeEntry) {
+    console.log('⚠️ User already has active entry:', activeEntry.id);
     throw new Error('Already clocked in');
   }
 
+  console.log('🔵 Creating new clock-in entry...');
   // Create new clock-in entry
-  return await timeClockModel.createClockIn(
+  const result = await timeClockModel.createClockIn(
     userId,
     issue_id,
     project_name,
@@ -28,30 +31,43 @@ export async function clockIn(userId, clockInData) {
     longitude,
     location_address
   );
+  console.log('✅ Clock-in entry created:', result.id);
+  return result;
 }
 
 /**
  * Clock out
  */
 export async function clockOut(userId, comment) {
+  console.log('🔴 Clock-out service called for user:', userId);
+  
   // Get active entry
   const activeEntry = await timeClockModel.getActiveEntry(userId);
   if (!activeEntry) {
+    console.log('⚠️ No active entry found for user:', userId);
     throw new Error('No active entry');
   }
+  
+  console.log('✅ Found active entry:', activeEntry.id);
 
   const clockOutTime = new Date();
   const clockInTime = new Date(activeEntry.clock_in);
   const pausedDuration = activeEntry.paused_duration || 0;
 
+  console.log('🕐 Clock times - In:', clockInTime, 'Out:', clockOutTime, 'Paused:', pausedDuration);
+
   // Calculate total hours
   const totalHours = utils.calculateTotalHours(clockInTime, clockOutTime, pausedDuration);
+  console.log('⏱️ Total hours calculated:', totalHours);
 
   // Update entry
+  console.log('💾 Updating clock-out in database...');
   const updatedEntry = await timeClockModel.updateClockOut(activeEntry.id, clockOutTime, totalHours);
+  console.log('✅ Clock-out updated successfully');
 
   // Add comment to issue if provided
   if (comment && activeEntry.issue_id) {
+    console.log('💬 Adding comment to issue:', activeEntry.issue_id);
     await timesheetModel.addIssueComment(activeEntry.issue_id, userId, comment);
     await timesheetModel.addIssueActivity(activeEntry.issue_id, userId, 'work_completed', {
       comment: comment.substring(0, 100),
@@ -62,6 +78,7 @@ export async function clockOut(userId, comment) {
   // Add to weekly timesheet
   let timesheetUpdateSuccess = false;
   try {
+    console.log('📊 Starting timesheet update...');
     if (totalHours > 0) {
       const weekStartStr = utils.getWeekStartMonday(clockOutTime);
       const weekEndStr = utils.getWeekEnd(weekStartStr);

@@ -59,6 +59,27 @@ async function apiRequest<T>(
 
 // API methods
 export const api = {
+  // Direct HTTP methods
+  get: <T>(endpoint: string, options?: RequestInit) =>
+    apiRequest<T>(endpoint, { ...options, method: 'GET' }),
+
+  post: <T>(endpoint: string, data?: any, options?: RequestInit) =>
+    apiRequest<T>(endpoint, {
+      ...options,
+      method: 'POST',
+      body: data ? JSON.stringify(data) : undefined
+    }),
+
+  put: <T>(endpoint: string, data?: any, options?: RequestInit) =>
+    apiRequest<T>(endpoint, {
+      ...options,
+      method: 'PUT',
+      body: data ? JSON.stringify(data) : undefined
+    }),
+
+  delete: <T>(endpoint: string, options?: RequestInit) =>
+    apiRequest<T>(endpoint, { ...options, method: 'DELETE' }),
+
   // Auth
   auth: {
     sendMagicLink: (email: string) =>
@@ -195,6 +216,17 @@ export const api = {
       apiRequest(`/users/${id}/role`, {
         method: 'PUT',
         body: JSON.stringify({ role }),
+      }),
+    
+    create: (data: { email: string; full_name?: string; role?: string }) =>
+      apiRequest('/users', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    
+    delete: (id: string) =>
+      apiRequest(`/users/${id}`, {
+        method: 'DELETE',
       }),
   },
 

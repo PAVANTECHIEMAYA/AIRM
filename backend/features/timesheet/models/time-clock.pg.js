@@ -24,10 +24,10 @@ export async function getActiveEntry(userId) {
 export async function createClockIn(userId, issueId, projectName, latitude, longitude, locationAddress) {
   const result = await pool.query(
     `INSERT INTO erp.time_clock (
-      user_id, issue_id, project_name, status,
+      id, user_id, issue_id, project_name, status,
       latitude, longitude, location_address, location_timestamp
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())
+    VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, $7, NOW())
     RETURNING *`,
     [
       userId,
