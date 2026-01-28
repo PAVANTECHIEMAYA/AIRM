@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { api } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
+import { api } from '../lib/api';
+import { toast } from '../hooks/use-toast';
 const logo = "/techiemaya-logo.png";
 
 const Auth = () => {

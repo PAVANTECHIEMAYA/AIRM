@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { api } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { api } from '../lib/api';
+import { toast } from '../hooks/use-toast';
 import { format, startOfWeek, endOfWeek, addDays, addWeeks, isAfter } from "date-fns";
 import { Plus, Trash2, Save, Share2, ChevronLeft, ChevronRight, Download, RefreshCw } from "lucide-react";
 import jsPDF from "jspdf";

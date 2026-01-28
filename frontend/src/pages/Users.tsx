@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { api } from "@/lib/api";
-import { toast } from "@/hooks/use-toast";
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { api } from '../lib/api';
+import { toast } from '../hooks/use-toast';
 import { Users as UsersIcon, Shield, User as UserIcon, RefreshCw } from "lucide-react";
 
 interface UserProfile {
