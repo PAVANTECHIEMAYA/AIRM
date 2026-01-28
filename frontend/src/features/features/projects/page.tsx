@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Textarea } from "../components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
-import { api } from "../lib/api";
-import { toast } from "../hooks/use-toast";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { api } from "@/lib/api";
+import { toast } from "@/hooks/use-toast";
 
 interface Project {
   id: number;
@@ -41,7 +41,7 @@ const Projects = () => {
   const fetchProjects = async () => {
     try {
       const response = await api.projects.getAll();
-      setProjects(Array.isArray(response) ? response : []);
+      setProjects(response);
     } catch (error: any) {
       console.error("Failed to fetch projects:", error);
       toast({

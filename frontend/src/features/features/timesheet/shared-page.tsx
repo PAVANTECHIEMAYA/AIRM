@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { api } from "../lib/api";
-import { toast } from "../hooks/use-toast";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../src/components/ui/card";
+import { Button } from "../../../src/components/ui/button";
+import { toast } from "../../../src/hooks/use-toast";
 import { format, addDays } from "date-fns";
 import { Download } from "lucide-react";
 import jsPDF from "jspdf";
