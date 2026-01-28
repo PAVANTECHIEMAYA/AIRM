@@ -3,8 +3,8 @@
  * Generates PDF documents for exit formalities
  */
 
-import { Button } from '@/components/ui/button';
-import { toast } from '@/hooks/use-toast';
+import { Button } from '../../../src/components/ui/button';
+import { toast } from '../../../src/hooks/use-toast';
 import {
   useAssetHandoverPDFData,
   useExperienceLetterPDFData,

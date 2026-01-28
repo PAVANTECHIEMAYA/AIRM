@@ -4,11 +4,11 @@
  */
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from '@/hooks/use-toast';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../src/components/ui/card';
+import { Button } from '../../../src/components/ui/button';
+import { Input } from '../../../src/components/ui/input';
+import { Label } from '../../../src/components/ui/label';
+import { toast } from '../../../src/hooks/use-toast';
 import { useSettlement, useCalculateSettlement, useSettlementPDFData } from '../hooks/useexit-formalities';
 import type { ExitRequest } from '../types';
 import {
@@ -266,7 +266,7 @@ export function SettlementTab({ exitRequest, isAdmin, onRefresh }: SettlementTab
                   id="leaveBalance"
                   type="number"
                   value={calculationForm.leaveBalance}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setCalculationForm({
                       ...calculationForm,
                       leaveBalance: parseFloat(e.target.value) || 0,
@@ -280,7 +280,7 @@ export function SettlementTab({ exitRequest, isAdmin, onRefresh }: SettlementTab
                   id="bonusAmount"
                   type="number"
                   value={calculationForm.bonusAmount}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setCalculationForm({
                       ...calculationForm,
                       bonusAmount: parseFloat(e.target.value) || 0,
@@ -294,7 +294,7 @@ export function SettlementTab({ exitRequest, isAdmin, onRefresh }: SettlementTab
                   id="incentivesAmount"
                   type="number"
                   value={calculationForm.incentivesAmount}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setCalculationForm({
                       ...calculationForm,
                       incentivesAmount: parseFloat(e.target.value) || 0,
@@ -308,7 +308,7 @@ export function SettlementTab({ exitRequest, isAdmin, onRefresh }: SettlementTab
                   id="reimbursements"
                   type="number"
                   value={calculationForm.reimbursements}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setCalculationForm({
                       ...calculationForm,
                       reimbursements: parseFloat(e.target.value) || 0,
@@ -322,7 +322,7 @@ export function SettlementTab({ exitRequest, isAdmin, onRefresh }: SettlementTab
                   id="noticePeriodRequired"
                   type="number"
                   value={calculationForm.noticePeriodRequired}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setCalculationForm({
                       ...calculationForm,
                       noticePeriodRequired: parseInt(e.target.value) || 30,
@@ -336,7 +336,7 @@ export function SettlementTab({ exitRequest, isAdmin, onRefresh }: SettlementTab
                   id="noticePeriodServed"
                   type="number"
                   value={calculationForm.noticePeriodServed}
-                  onChange={(e) =>
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setCalculationForm({
                       ...calculationForm,
                       noticePeriodServed: parseInt(e.target.value) || 0,
